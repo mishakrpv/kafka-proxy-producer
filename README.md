@@ -1,15 +1,10 @@
-<img src="https://media.giphy.com/media/JIX9t2j0ZTN9S/giphy-downsized.gif" alt="Logo project" height="160" />
-
-_logo will be soon_
+# Kafka Proxy Producer
 
 ![Build Status][build-shield]
 ![Go version][go-shield]
 [![Apache License][license-shield]][license-url]
-[![Twitter][twitter-shield]][twitter-url]
 
-# Kafka Proxy Producer
-
-Kafka Proxy Producer is a web server that facilitates the production of messages to a Kafka broker based on specified routes defined in a **`configuration.json`** file. This project allows you to map HTTP requests to Kafka messages, enabling seamless integration between your applications and Kafka.
+Kafka Proxy Producer is a web server that facilitates the production of messages to a Kafka broker based on specified routes defined in a `configuration.json` file. This project allows you to map HTTP requests to Kafka messages, enabling seamless integration between your applications and Kafka.
 
 ## Features
 
@@ -25,26 +20,14 @@ The routes are defined in a **`configuration.json`** file, which should be struc
 {
   "Routes": [
     {
-      "DownstreamTopicPartition": {
-        "Topic": "example.domain.action",
-        "Partition": 1,
-        "Offset": null,
-        "Metadata": null
-      },
-      "DownstreamMessage": {
-        "principal": {
-          "id": "[FromRoute]",
-          "name": "[FromBody]"
-        }
-      },
+      "DownstreamTopicPartition": {},
+      "DownstreamMessage": {},
       "UpstreamPathTemplate": "/items/{id}",
       "UpstreamHttpMethod": ["Post"]
     }
   ]
 }
 ```
-
-### Configuration Fields
 
 - **DownstreamTopicPartition**: Specifies the Kafka topic and partition to which the message will be sent.
   - `Topic`: The name of the Kafka topic.
@@ -53,16 +36,10 @@ The routes are defined in a **`configuration.json`** file, which should be struc
   - `Metadata`: Additional metadata (optional).
 - **DownstreamMessage**: Defines the structure of the Kafka message that will be produced.
   - Use placeholders like `[FromRoute]`, `[FromBody]`, and `[FromHeader]` to dynamically map data from the HTTP request.
-- **UpstreamPathTemplate**: The URL path that the web server will listen to for incoming requests. You can use path parameters for dynamic routing like this `../{name}/...`.
+- **UpstreamPathTemplate**: The URL path that the web server will listen to for incoming requests. You can use path parameters for dynamic routing like this `.../{name}/...`.
 - **UpstreamHttpMethod**: An array of allowed HTTP methods for this route (e.g., `["Post", "Put"]`).
 
 ## Getting Started
-
-### Prerequisites
-
-- Docker
-- Kafka broker
-- Make
 
 ### Installation
 
@@ -79,7 +56,7 @@ The routes are defined in a **`configuration.json`** file, which should be struc
    go mod tidy
    ```
 
-3. Configure your **`configuration.json`** file as per your requirements.
+3. Configure your `configuration.json` file as per your requirements.
 
 ### Running the Server
 
@@ -153,7 +130,5 @@ Don't forget to give the project a star! Thanks again!
 
 [license-shield]: https://img.shields.io/badge/license-Apache%202.0-red?style=flat-square
 [license-url]: https://github.com/mishakrpv/kafka-proxy-producer/blob/main/LICENSE
-[twitter-shield]: https://img.shields.io/twitter/follow/mishakrpv.svg?label=Follow&style=social
-[twitter-url]: https://twitter.com/mishakrpv
 [go-shield]: https://img.shields.io/github/go-mod/go-version/mishakrpv/kafka-proxy-producer
 [build-shield]: https://github.com/mishakrpv/kafka-proxy-producer/actions/workflows/go.yml/badge.svg
