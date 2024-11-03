@@ -25,7 +25,7 @@
         },
         "Authorization": "[FromHeader]"
       },
-      "UpstreamPathTemplate": "/test/{id}",
+      "UpstreamPathTemplate": "/items/{id}",
       "UpstreamHttpMethod": ["Post"]
     }
   ]
