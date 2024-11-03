@@ -1,6 +1,6 @@
 <img src="https://media.giphy.com/media/JIX9t2j0ZTN9S/giphy-downsized.gif" alt="Logo project" height="160" />
 
-*logo will be soon*
+_logo will be soon_
 
 ![Build Status][build-shield]
 ![Go version][go-shield]
@@ -32,13 +32,13 @@ The routes are defined in a **`configuration.json`** file, which should be struc
         "Metadata": null
       },
       "DownstreamMessage": {
-        // define message structure here using supported sources
-        /*
-            ...
-        */
+        "principal": {
+          "id": "[FromRoute]",
+          "name": "[FromBody]"
+        }
       },
-      "UpstreamPathTemplate": "/items/{id}", // specify route parameters in {} brackets
-      "UpstreamHttpMethod": ["Post"] // list methods
+      "UpstreamPathTemplate": "/items/{id}",
+      "UpstreamHttpMethod": ["Post"]
     }
   ]
 }
