@@ -17,7 +17,7 @@ type route struct {
 	DownstreamTopicPartition kafka.TopicPartition   `json:"DownstreamTopicPartition"`
 	DownstreamMessage        map[string]interface{} `json:"DownstreamMessage"`
 	UpstreamPathTemplate     string                 `json:"UpstreamPathTemplate"`
-	UpstreamHttpMethod       string                 `json:"UpstreamHttpMethod"`
+	UpstreamHttpMethod       []string               `json:"UpstreamHttpMethod"`
 }
 
 func LoadFromFile(path string) *ProxyConfig {

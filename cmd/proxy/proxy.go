@@ -17,6 +17,5 @@ func main() {
 	cfg := config.LoadFromFile(*pathPtr)
 
 	server := server.New(cfg)
-
-	log.Fatal(server.ListenAndServe())
+	log.Fatal(server.Run())
 }
