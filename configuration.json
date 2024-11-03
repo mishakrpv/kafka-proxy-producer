@@ -7,16 +7,25 @@
         "Offset": null,
         "Metadata": null
       },
+      "DownstreamMessage": {},
+      "UpstreamPathTemplate": "/",
+      "UpstreamHttpMethod": ["Post"]
+    },
+    {
+      "DownstreamTopicPartition": {
+        "Topic": "example.domain.action",
+        "Partition": 1,
+        "Offset": null,
+        "Metadata": null
+      },
       "DownstreamMessage": {
-        "example_id": "[FromBody]",
-        "page": "[FromQuery]",
         "principal": {
           "id": "[FromRoute]",
           "name": "[FromBody]"
         },
         "Authorization": "[FromHeader]"
       },
-      "UpstreamPathTemplate": "/",
+      "UpstreamPathTemplate": "/test/{id}",
       "UpstreamHttpMethod": ["Post"]
     }
   ]

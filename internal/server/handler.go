@@ -2,13 +2,16 @@ package server
 
 import (
 	"errors"
+	"fmt"
 	"log"
 	"net/http"
 	"slices"
 	"strings"
 
+	"github.com/confluentinc/confluent-kafka-go/v2/kafka"
 	"github.com/gorilla/mux"
 	"github.com/mishakrpv/kafka-proxy-producer/internal/message"
+	"github.com/mishakrpv/kafka-proxy-producer/kafka/producer"
 )
 
 type param struct {
@@ -17,7 +20,7 @@ type param struct {
 	message message.Message
 }
 
-func (p *param) writeValue(value string) {
+func (p *param) writeValue(value string) error {
 	depth := len(p.keys) - 1
 	key := p.keys[depth]
 
@@ -25,14 +28,23 @@ func (p *param) writeValue(value string) {
 
 	for i := 0; i <= depth; i++ {
 		if i == depth {
-			currentMap = *currentMap.Add(key, value)
-			return
+			currentMap.Add(key, value)
+			return nil
 		}
 
-		if _, ok := currentMap[p.keys[i]]; !ok {
-			currentMap[p.keys[i]] = make(map[string]interface{})
+		currentKey := p.keys[i]
+
+		if _, ok := currentMap[currentKey]; !ok {
+			currentMap.Add(currentKey, make(map[string]interface{}))
+		}
+		if m, ok := currentMap[currentKey].(map[string]interface{}); ok {
+			currentMap = m
+		} else {
+			return fmt.Errorf("no value provided: %s", key)
 		}
 	}
+
+	return nil
 }
 
 func (p *param) key() (string, error) {
@@ -48,14 +60,14 @@ func registerRoutes(routes []upstreamRoute) http.Handler {
 
 	for _, route := range routes {
 		router.HandleFunc(route.path, func(w http.ResponseWriter, r *http.Request) {
-			f(w, r, route.methods, route.params)
+			f(w, r, route.methods, route.params, route.tprt)
 		})
 	}
 
 	return router
 }
 
-func f(w http.ResponseWriter, r *http.Request, methods []string, params []param) {
+func f(w http.ResponseWriter, r *http.Request, methods []string, params []param, tprt *kafka.TopicPartition) {
 	for i, method := range methods {
 		methods[i] = strings.ToUpper(method)
 	}
@@ -74,6 +86,8 @@ func f(w http.ResponseWriter, r *http.Request, methods []string, params []param)
 			return
 		}
 	}
+
+	producer.Produce(tprt, message.Build())
 
 	w.WriteHeader(http.StatusOK)
 }

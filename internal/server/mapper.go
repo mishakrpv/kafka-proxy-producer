@@ -1,11 +1,15 @@
 package server
 
-import "github.com/mishakrpv/kafka-proxy-producer/internal/config"
+import (
+	"github.com/confluentinc/confluent-kafka-go/v2/kafka"
+	"github.com/mishakrpv/kafka-proxy-producer/internal/config"
+)
 
 type upstreamRoute struct {
 	path    string
 	methods []string
 	params  []param
+	tprt    *kafka.TopicPartition
 }
 
 func mapRoutes(cfg *config.ProxyConfig) []upstreamRoute {
@@ -16,6 +20,7 @@ func mapRoutes(cfg *config.ProxyConfig) []upstreamRoute {
 			path:    route.UpstreamPathTemplate,
 			methods: route.UpstreamHttpMethod,
 			params:  extractParams(route.DownstreamMessage, nil, nil),
+			tprt:    route.DownstreamTopicPartition,
 		})
 	}
 	return routes

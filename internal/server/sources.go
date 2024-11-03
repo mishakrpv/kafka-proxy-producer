@@ -2,7 +2,6 @@ package server
 
 import (
 	"encoding/json"
-	"errors"
 	"fmt"
 	"net/http"
 	"slices"
@@ -52,7 +51,11 @@ func fromBody(p *param, r *http.Request) error {
 	}
 
 	value := searchInBody(body, p.keys)
-	p.writeValue(value)
+	err = p.writeValue(value)
+	if err != nil {
+		return nil
+	}
+
 	return nil
 }
 
@@ -63,7 +66,10 @@ func fromQuery(p *param, r *http.Request) error {
 	}
 
 	value := r.URL.Query().Get(key)
-	p.writeValue(value)
+	err = p.writeValue(value)
+	if err != nil {
+		return err
+	}
 	return nil
 }
 
@@ -76,11 +82,14 @@ func fromRoute(p *param, r *http.Request) error {
 	vars := mux.Vars(r)
 
 	if value, ok := vars[key]; ok {
-		p.writeValue(value)
+		err = p.writeValue(value)
+		if err != nil {
+			return err
+		}
 		return nil
 	}
 
-	return errors.New("no value provided")
+	return fmt.Errorf("no value provided: %s", key)
 }
 
 func fromForm(p *param, r *http.Request) error {
@@ -91,7 +100,10 @@ func fromForm(p *param, r *http.Request) error {
 
 	r.ParseForm()
 	value := r.FormValue(key)
-	p.writeValue(value)
+	err = p.writeValue(value)
+	if err != nil {
+		return err
+	}
 	return nil
 }
 
@@ -102,6 +114,9 @@ func fromHeader(p *param, r *http.Request) error {
 	}
 
 	value := r.Header.Get(key)
-	p.writeValue(value)
+	err = p.writeValue(value)
+	if err != nil {
+		return err
+	}
 	return nil
 }

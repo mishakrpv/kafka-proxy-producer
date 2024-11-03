@@ -14,7 +14,7 @@ type ProxyConfig struct {
 }
 
 type route struct {
-	DownstreamTopicPartition kafka.TopicPartition   `json:"DownstreamTopicPartition"`
+	DownstreamTopicPartition *kafka.TopicPartition  `json:"DownstreamTopicPartition"`
 	DownstreamMessage        map[string]interface{} `json:"DownstreamMessage"`
 	UpstreamPathTemplate     string                 `json:"UpstreamPathTemplate"`
 	UpstreamHttpMethod       []string               `json:"UpstreamHttpMethod"`
