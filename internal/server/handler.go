@@ -93,16 +93,16 @@ func f(w http.ResponseWriter, r *http.Request, methods []string, params []param,
 }
 
 func matchSource(p *param, r *http.Request) error {
-	switch p.source {
-	case "[FromBody]":
+	switch strings.ToLower(p.source) {
+	case "[frombody]":
 		return fromBody(p, r)
-	case "[FromQuery]":
+	case "[fromquery]":
 		return fromQuery(p, r)
-	case "[FromRoute]":
+	case "[fromroute]":
 		return fromRoute(p, r)
-	case "[FromForm]":
+	case "[fromform]":
 		return fromForm(p, r)
-	case "[FromHeader]":
+	case "[fromheader]":
 		return fromHeader(p, r)
 	default:
 		log.Printf("Unsupported source: %s", p.source)
