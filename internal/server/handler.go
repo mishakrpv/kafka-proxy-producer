@@ -10,8 +10,8 @@ import (
 
 	"github.com/confluentinc/confluent-kafka-go/v2/kafka"
 	"github.com/gorilla/mux"
-	"github.com/mishakrpv/kafka-proxy-producer/internal/message"
-	"github.com/mishakrpv/kafka-proxy-producer/kafka/producer"
+	"github.com/mishakrpv/kafka-proxy-producer/message"
+	"github.com/mishakrpv/kafka-proxy-producer/producer"
 )
 
 type param struct {
