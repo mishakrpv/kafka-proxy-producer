@@ -22,8 +22,8 @@ Routes are defined in a **`configuration.json`** file with the following structu
     {
       "DownstreamTopicPartition": {},
       "DownstreamMessage": {},
-      "UpstreamPathTemplate": "/items/{id}",
-      "UpstreamHttpMethod": ["Post"]
+      "UpstreamPathTemplate": "/",
+      "UpstreamHttpMethod": []
     }
   ],
   "LaunchSettings": {}
