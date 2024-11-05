@@ -32,3 +32,9 @@ lint:
 	@echo "Linting..."
 
 	golangci-lint run
+
+.PHONY: run
+run: build
+	@echo "Running $(APP_NAME)..."
+
+	@$(BUILD_DIR)/$(APP_NAME)
