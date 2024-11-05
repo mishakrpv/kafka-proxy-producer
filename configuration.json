@@ -7,17 +7,6 @@
         "Offset": null,
         "Metadata": null
       },
-      "DownstreamMessage": {},
-      "UpstreamPathTemplate": "/",
-      "UpstreamHttpMethod": ["Post"]
-    },
-    {
-      "DownstreamTopicPartition": {
-        "Topic": "example.domain.action",
-        "Partition": 1,
-        "Offset": null,
-        "Metadata": null
-      },
       "DownstreamMessage": {
         "principal": {
           "id": "[FromRoute]",
@@ -28,5 +17,9 @@
       "UpstreamPathTemplate": "/items/{id}",
       "UpstreamHttpMethod": ["Post"]
     }
-  ]
+  ],
+  "LaunchSettings": {
+    "Port": 5465,
+    "EnvironmentVariables": {}
+  }
 }

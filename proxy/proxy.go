@@ -1,20 +1,24 @@
 package main
 
 import (
-	"flag"
 	"log"
+	"os"
 
 	"github.com/mishakrpv/kafka-proxy-producer/internal/config"
 	"github.com/mishakrpv/kafka-proxy-producer/internal/server"
 )
 
 const (
-	DEFAULT_PATH = "../../configuration.json"
+	defaultPath = "configuration.json"
 )
 
 func main() {
-	pathPtr := flag.String("c", DEFAULT_PATH, "Path to the configuration file")
-	cfg := config.LoadFromFile(*pathPtr)
+	path := os.Getenv("CONFIG_PATH")
+	if path == "" {
+		path = defaultPath
+	}
+
+	cfg := config.LoadFromFile(path)
 
 	server := server.New(cfg)
 	log.Fatal(server.Run())

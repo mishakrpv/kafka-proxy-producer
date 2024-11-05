@@ -5,10 +5,8 @@ import (
 	"log"
 	"net/http"
 	"os"
-	"strconv"
 	"time"
 
-	"github.com/joho/godotenv"
 	"github.com/mishakrpv/kafka-proxy-producer/internal/config"
 )
 
@@ -16,23 +14,25 @@ type Server struct {
 	server *http.Server
 
 	proxyCfg *config.ProxyConfig
-
-	cfg map[string]interface{}
 }
 
+const (
+	defaultPort = 5465
+)
+
 func New(proxyCfg *config.ProxyConfig) *Server {
-	if err := godotenv.Load(); err != nil {
-		log.Fatal("Error loading .env file")
+	s := &Server{proxyCfg: proxyCfg}
+
+	if proxyCfg.LauchSettings.Port == 0 {
+		proxyCfg.LauchSettings.Port = defaultPort
 	}
 
-	s := &Server{proxyCfg: proxyCfg}
-	s.cfg = make(map[string]interface{})
-
-	port, _ := strconv.Atoi(os.Getenv("PORT"))
-	s.cfg["PORT"] = port
+	for key, value := range proxyCfg.LauchSettings.EnvironmentVariables {
+		os.Setenv(key, value)
+	}
 
 	s.server = &http.Server{
-		Addr:         fmt.Sprintf(":%d", port),
+		Addr:         fmt.Sprintf(":%d", proxyCfg.LauchSettings.Port),
 		Handler:      registerRoutes(mapRoutes(proxyCfg)),
 		IdleTimeout:  time.Minute,
 		ReadTimeout:  10 * time.Second,
@@ -43,6 +43,6 @@ func New(proxyCfg *config.ProxyConfig) *Server {
 }
 
 func (s *Server) Run() error {
-	log.Printf("Server running at %d", s.cfg["PORT"])
+	log.Printf("Server listening on port: %d", s.proxyCfg.LauchSettings.Port)
 	return s.server.ListenAndServe()
 }

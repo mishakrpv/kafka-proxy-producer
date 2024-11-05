@@ -10,7 +10,8 @@ import (
 )
 
 type ProxyConfig struct {
-	Routes []route `json:"Routes"`
+	Routes        []route        `json:"Routes"`
+	LauchSettings lauchSettings `json:"LaunchSettings"`
 }
 
 type route struct {
@@ -18,6 +19,11 @@ type route struct {
 	DownstreamMessage        map[string]interface{} `json:"DownstreamMessage"`
 	UpstreamPathTemplate     string                 `json:"UpstreamPathTemplate"`
 	UpstreamHttpMethod       []string               `json:"UpstreamHttpMethod"`
+}
+
+type lauchSettings struct {
+	Port                 int               `json:"Port"`
+	EnvironmentVariables map[string]string `json:"EnvironmentVariables"`
 }
 
 func LoadFromFile(path string) *ProxyConfig {
