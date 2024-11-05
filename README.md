@@ -8,13 +8,13 @@ Kafka Proxy Producer is a web server that facilitates seamless message productio
 
 ## Features
 
-- **Dynamic Route Configuration**: Define routes in a JSON configuration file that specify how incoming HTTP requests should be transformed into Kafka messages.
+- **Dynamic Route Configuration**: Define routes in a json file that specify how incoming HTTP requests should be transformed into Kafka messages.
 - **Supports Multiple HTTP Methods**: Configure routes for various HTTP methods (e.g., POST) to handle different types of requests.
 - **Flexible Message Mapping**: Customize the Kafka messages produced based on the incoming request data, including all kinds of parameters.
 
 ## Configuration
 
-Routes are defined in a **`configuration.json`** file with the following structure:
+Routes are defined in a `configuration.json` file with the following structure:
 
 ```json
 {
