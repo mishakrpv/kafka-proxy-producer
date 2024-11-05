@@ -4,7 +4,7 @@
 ![Go version][go-shield]
 [![Apache License][license-shield]][license-url]
 
-Kafka Proxy Producer is a web server that facilitates the production of messages to a Kafka broker based on specified routes defined in a `configuration.json` file. This project allows you to map HTTP requests to Kafka messages, enabling seamless integration between your applications and Kafka.
+Kafka Proxy Producer is a web server that facilitates seamless message production to Kafka broker based on specified routes defined in a `configuration.json` file. This project bridges your applications and Kafka by mapping incoming HTTP requests to Kafka messages, enhancing integration capabilities.
 
 ## Features
 
@@ -14,7 +14,7 @@ Kafka Proxy Producer is a web server that facilitates the production of messages
 
 ## Configuration
 
-The routes are defined in a **`configuration.json`** file, which should be structured as follows:
+Routes are defined in a **`configuration.json`** file with the following structure:
 
 ```json
 {
@@ -25,7 +25,8 @@ The routes are defined in a **`configuration.json`** file, which should be struc
       "UpstreamPathTemplate": "/items/{id}",
       "UpstreamHttpMethod": ["Post"]
     }
-  ]
+  ],
+  "LaunchSettings: {}
 }
 ```
 
@@ -52,7 +53,7 @@ The routes are defined in a **`configuration.json`** file, which should be struc
 2. Install dependencies:
 
    ```bash
-   go mod tidy
+   go mod download && go mod verify
    ```
 
 3. Configure your `configuration.json` file as per your requirements.
@@ -67,12 +68,6 @@ Start the server by executing:
 
 ```bash
 make run
-```
-
-To specify the path to your configuration file, use the -c flag:
-
-```bash
-make run ARGS="-c /path/to/your/configuration.json"
 ```
 
 #### Running in Docker
@@ -91,7 +86,13 @@ docker run -e CONFIG_PATH="/path/to/your/configuration.json" -p 5465:5465 kafka-
 
 ### Example Usage
 
-1. Send a POST request to the defined endpoint:
+1. Execute following command in the [example](./example) directory:
+
+   ```bash
+   docker-compose up
+   ```
+
+2. Send a POST request to the defined endpoint:
 
    ```bash
    POST http://localhost:5465/items/123
@@ -99,13 +100,11 @@ docker run -e CONFIG_PATH="/path/to/your/configuration.json" -p 5465:5465 kafka-
    Authorization: Bearer your_token
 
    {
-       "principal: {
-           "name": "John Doe"
-       }
+      "principal": {
+        "name": "John Doe"
+      }
    }
    ```
-
-2. The server will produce a Kafka message based on the configuration.
 
 ## License
 
