@@ -1,5 +1,3 @@
-version: "3.8"
-
 services:
   kafka:
     image: confluentinc/cp-kafka:latest
@@ -23,11 +21,11 @@ services:
 
   app:
     build:
-      context: .
+      context: ../.
       dockerfile: Dockerfile
     ports:
       - "5465:5465" 
     depends_on:
       - kafka
     environment:
-      KAFKA_BROKER: kafka:9092
+      KAFKA_URL: kafka:9092
