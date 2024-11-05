@@ -5,12 +5,13 @@ import (
 	"io"
 	"log"
 	"os"
+	"path/filepath"
 
 	"github.com/confluentinc/confluent-kafka-go/v2/kafka"
 )
 
 type ProxyConfig struct {
-	Routes        []route        `json:"Routes"`
+	Routes        []route       `json:"Routes"`
 	LauchSettings lauchSettings `json:"LaunchSettings"`
 }
 
@@ -18,7 +19,7 @@ type route struct {
 	DownstreamTopicPartition *kafka.TopicPartition  `json:"DownstreamTopicPartition"`
 	DownstreamMessage        map[string]interface{} `json:"DownstreamMessage"`
 	UpstreamPathTemplate     string                 `json:"UpstreamPathTemplate"`
-	UpstreamHttpMethod       []string               `json:"UpstreamHttpMethod"`
+	UpstreamHTTPMethod       []string               `json:"UpstreamHttpMethod"`
 }
 
 type lauchSettings struct {
@@ -27,19 +28,22 @@ type lauchSettings struct {
 }
 
 func LoadFromFile(path string) *ProxyConfig {
-	file, err := os.Open(path)
+	file, err := os.Open(filepath.Clean(path))
 	if err != nil {
-		log.Fatal("An error occured while opening the configuration file")
+		log.Fatal("An error occurred while opening the configuration file")
 	}
 	defer file.Close()
 
 	data, err := io.ReadAll(file)
 	if err != nil {
-		log.Fatal("An error occured while reading the configuration file")
+		log.Fatal("An error occurred while reading the configuration file")
 	}
 
 	var config *ProxyConfig
-	json.Unmarshal(data, &config)
+	err = json.Unmarshal(data, &config)
+	if err != nil {
+		log.Fatalf("An error occurred while reading the configuration file")
+	}
 
 	return config
 }

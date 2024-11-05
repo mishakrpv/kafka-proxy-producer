@@ -28,7 +28,10 @@ func New(proxyCfg *config.ProxyConfig) *Server {
 	}
 
 	for key, value := range proxyCfg.LauchSettings.EnvironmentVariables {
-		os.Setenv(key, value)
+		err := os.Setenv(key, value)
+		if err != nil {
+			log.Fatalf("An error occurred while setting environment variable for: %s", key)
+		}
 	}
 
 	s.server = &http.Server{

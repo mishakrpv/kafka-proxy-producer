@@ -13,7 +13,7 @@ func withDefaults() *kafka.ConfigMap {
 func Produce(topicPartition *kafka.TopicPartition, message string) {
 	p, err := kafka.NewProducer(withDefaults())
 	if err != nil {
-		log.Print("An error occured while creating a new producer")
+		log.Print("An error occurred while creating a new producer")
 		return
 	}
 	defer p.Close()

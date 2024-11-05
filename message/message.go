@@ -19,7 +19,7 @@ func (m *Message) Add(key string, value interface{}) *Message {
 func (m *Message) Build() string {
 	data, err := json.Marshal(m)
 	if err != nil {
-		log.Println("An error occured while marshaling JSON:", err)
+		log.Println("An error occurred while marshaling JSON:", err)
 		return ""
 	}
 

@@ -98,7 +98,11 @@ func fromForm(p *param, r *http.Request) error {
 		return err
 	}
 
-	r.ParseForm()
+	err = r.ParseForm()
+	if err != nil {
+		return err
+	}
+
 	value := r.FormValue(key)
 	err = p.writeValue(value)
 	if err != nil {

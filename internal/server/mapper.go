@@ -18,7 +18,7 @@ func mapRoutes(cfg *config.ProxyConfig) []upstreamRoute {
 	for _, route := range cfg.Routes {
 		routes = append(routes, upstreamRoute{
 			path:    route.UpstreamPathTemplate,
-			methods: route.UpstreamHttpMethod,
+			methods: route.UpstreamHTTPMethod,
 			params:  extractParams(route.DownstreamMessage, nil, nil),
 			tprt:    route.DownstreamTopicPartition,
 		})
