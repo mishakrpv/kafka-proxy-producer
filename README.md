@@ -26,7 +26,7 @@ Routes are defined in a **`configuration.json`** file with the following structu
       "UpstreamHttpMethod": ["Post"]
     }
   ],
-  "LaunchSettings: {}
+  "LaunchSettings": {}
 }
 ```
 
