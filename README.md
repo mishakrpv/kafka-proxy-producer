@@ -10,7 +10,7 @@ Kafka Proxy Producer is a web server that facilitates seamless message productio
 
 - **Dynamic Route Configuration**: Define routes in a json file that specify how incoming HTTP requests should be transformed into Kafka messages.
 - **Supports Multiple HTTP Methods**: Configure routes for various HTTP methods (e.g., POST) to handle different types of requests.
-- **Flexible Message Mapping**: Customize the Kafka messages produced based on the incoming request data, including all kinds of parameters.
+- **Flexible Message Mapping**: Customize the Kafka messages produced based on the incoming request data.
 
 ## Configuration
 
@@ -38,6 +38,19 @@ Routes are defined in a `configuration.json` file with the following structure:
 - **DownstreamMessage**: Defines the structure of the Kafka message that will be produced. Use placeholders like `[FromRoute]`, `[FromBody]`, and `[FromHeader]` to dynamically map data from the HTTP request.
 - **UpstreamPathTemplate**: The URL path that the web server will listen to for incoming requests. You can use path parameters for dynamic routing like this `.../{name}/...`.
 - **UpstreamHttpMethod**: An array of allowed HTTP methods for this route (e.g., `["Post", "Put"]`).
+
+### Downstream Message Sources
+
+You can map data from different parts of the incoming HTTP request to form the Kafka message. The following placeholders are supported:
+
+- **[FromBody]**: Data from the HTTP request body.
+- **[FromRoute]**: Data from the URL path (e.g., dynamic segments like `/items/{id}`).
+- **[FromQuery]**: Data from the query string parameters (e.g., `/items?id=123`).
+- **[FromForm]**: Data from the form-encoded body of the HTTP request.
+- **[FromHeader]**: Data from the HTTP request headers (e.g., `Authorization`, `Content-Type`).
+
+> [!NOTE]
+> When you define nested json structures in the `DownstreamMessage` section of the configuration, this structure will be mirrored in both the incoming HTTP request and the resulting Kafka message.
 
 ## Getting Started
 
