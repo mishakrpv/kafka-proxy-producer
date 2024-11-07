@@ -6,11 +6,15 @@ import (
 	"github.com/confluentinc/confluent-kafka-go/v2/kafka"
 )
 
+type Producer interface {
+	Produce(topicPartition *kafka.TopicPartition, message string)
+}
+
 type ConfluentIncKafkaProducer struct {
 	cfg kafka.ConfigMap
 }
 
-func New(cfg kafka.ConfigMap) *ConfluentIncKafkaProducer {
+func New(cfg kafka.ConfigMap) Producer {
 	return &ConfluentIncKafkaProducer{cfg: cfg}
 }
 

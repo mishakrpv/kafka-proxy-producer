@@ -17,7 +17,7 @@ type Server struct {
 
 	proxyCfg *config.ProxyConfig
 
-	producer *producer.ConfluentIncKafkaProducer
+	producer producer.Producer
 }
 
 const (
