@@ -1,9 +1,54 @@
 package server
 
 import (
+	"errors"
+	"fmt"
+
 	"github.com/confluentinc/confluent-kafka-go/v2/kafka"
 	"github.com/mishakrpv/kafka-proxy-producer/internal/config"
+	"github.com/mishakrpv/kafka-proxy-producer/message"
 )
+
+type param struct {
+	source  string
+	keys    []string
+	message message.Message
+}
+
+func (p *param) writeValue(value string) error {
+	depth := len(p.keys) - 1
+	key := p.keys[depth]
+
+	currentMap := p.message
+
+	for i := 0; i <= depth; i++ {
+		if i == depth {
+			currentMap.Add(key, value)
+			return nil
+		}
+
+		currentKey := p.keys[i]
+
+		if _, ok := currentMap[currentKey]; !ok {
+			currentMap.Add(currentKey, make(map[string]interface{}))
+		}
+		if m, ok := currentMap[currentKey].(map[string]interface{}); ok {
+			currentMap = m
+		} else {
+			return fmt.Errorf("no value provided: %s", key)
+		}
+	}
+
+	return nil
+}
+
+func (p *param) key() (string, error) {
+	length := len(p.keys)
+	if length < 1 {
+		return "", errors.New("params has no keys")
+	}
+	return p.keys[length-1], nil
+}
 
 type upstreamRoute struct {
 	path           string
