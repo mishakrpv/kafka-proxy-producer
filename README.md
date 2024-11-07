@@ -36,9 +36,9 @@ Routes are defined in a `configuration.json` file with the following structure:
   - `Offset`: The offset for the message (use null to let Kafka handle it).
   - `Metadata`: Additional metadata (optional).
 - **DownstreamMessage**: Defines the structure of the Kafka message that will be produced. Use placeholders like `[FromRoute]`, `[FromBody]`, and `[FromHeader]` to dynamically map data from the HTTP request.
-  
-  > [!NOTE]
-  > When you define nested json structures in the `DownstreamMessage` section of the configuration, this structure will be mirrored in both the incoming HTTP request and the resulting Kafka message.
+
+> [!NOTE]
+> When you define nested json structures in the `DownstreamMessage` section of the configuration, this structure will be mirrored in both the incoming HTTP request and the resulting Kafka message.
 
 - **UpstreamPathTemplate**: The URL path that the web server will listen to for incoming requests. You can use path parameters for dynamic routing like this `.../{name}/...`.
 - **UpstreamHttpMethod**: An array of allowed HTTP methods for this route (e.g., `["Post", "Put"]`).
