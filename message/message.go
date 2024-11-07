@@ -11,9 +11,9 @@ func MakeMessage() Message {
 	return make(map[string]interface{})
 }
 
-func (m *Message) Add(key string, value interface{}) *Message {
+func (m *Message) Add(key string, value interface{}) Message {
 	(*m)[key] = value
-	return m
+	return *m
 }
 
 func (m *Message) Build() string {
