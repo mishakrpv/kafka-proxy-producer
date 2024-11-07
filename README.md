@@ -43,7 +43,7 @@ Routes are defined in a `configuration.json` file with the following structure:
 - **UpstreamPathTemplate**: The URL path that the web server will listen to for incoming requests. You can use path parameters for dynamic routing like this `.../{name}/...`.
 - **UpstreamHttpMethod**: An array of allowed HTTP methods for this route (e.g., `["Post", "Put"]`).
 
-See [configuration documentation](./docs/configuration.md) for more details.
+See the [configuration documentation](./docs/configuration.md) for more details.
 
 ## Getting Started
 
