@@ -6,14 +6,18 @@ import (
 	"github.com/confluentinc/confluent-kafka-go/v2/kafka"
 )
 
-func withDefaults() *kafka.ConfigMap {
-	return &kafka.ConfigMap{"bootstrap.servers": "localhost"}
+type ConfluentIncKafkaProducer struct {
+	cfg kafka.ConfigMap
 }
 
-func Produce(topicPartition *kafka.TopicPartition, message string) {
-	p, err := kafka.NewProducer(withDefaults())
+func New(cfg kafka.ConfigMap) *ConfluentIncKafkaProducer {
+	return &ConfluentIncKafkaProducer{cfg: cfg}
+}
+
+func (k *ConfluentIncKafkaProducer) Produce(topicPartition *kafka.TopicPartition, message string) {
+	p, err := kafka.NewProducer(&k.cfg)
 	if err != nil {
-		log.Print("An error occurred while creating a new producer")
+		log.Println("An error occurred while creating a new producer:", err)
 		return
 	}
 	defer p.Close()
@@ -31,11 +35,14 @@ func Produce(topicPartition *kafka.TopicPartition, message string) {
 		}
 	}()
 
-	p.Produce(&kafka.Message{
+	err = p.Produce(&kafka.Message{
 		TopicPartition: *topicPartition,
 		Value:          []byte(message),
 	}, nil)
-
+	if err != nil {
+		log.Println("An error occurred producing message:", err)
+		return
+	}
 	// Wait for message deliveries before shutting down
 	p.Flush(15 * 1000)
 }

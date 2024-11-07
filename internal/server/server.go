@@ -7,13 +7,17 @@ import (
 	"os"
 	"time"
 
+	"github.com/confluentinc/confluent-kafka-go/v2/kafka"
 	"github.com/mishakrpv/kafka-proxy-producer/internal/config"
+	"github.com/mishakrpv/kafka-proxy-producer/producer"
 )
 
 type Server struct {
 	server *http.Server
 
 	proxyCfg *config.ProxyConfig
+
+	producer *producer.ConfluentIncKafkaProducer
 }
 
 const (
@@ -34,9 +38,13 @@ func New(proxyCfg *config.ProxyConfig) *Server {
 		}
 	}
 
+	s.producer = producer.New(kafka.ConfigMap{
+		"bootstrap.servers": os.Getenv("KAFKA__BOOTSTRAP_SERVERS"),
+	})
+
 	s.server = &http.Server{
 		Addr:         fmt.Sprintf(":%d", proxyCfg.LauchSettings.Port),
-		Handler:      registerRoutes(mapRoutes(proxyCfg)),
+		Handler:      s.registerRoutes(mapRoutes(proxyCfg)),
 		IdleTimeout:  time.Minute,
 		ReadTimeout:  10 * time.Second,
 		WriteTimeout: 30 * time.Second,

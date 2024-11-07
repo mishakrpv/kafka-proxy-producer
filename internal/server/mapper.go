@@ -6,10 +6,10 @@ import (
 )
 
 type upstreamRoute struct {
-	path    string
-	methods []string
-	params  []param
-	tprt    *kafka.TopicPartition
+	path           string
+	methods        []string
+	params         []param
+	topicPartition *kafka.TopicPartition
 }
 
 func mapRoutes(cfg *config.ProxyConfig) []upstreamRoute {
@@ -17,10 +17,10 @@ func mapRoutes(cfg *config.ProxyConfig) []upstreamRoute {
 
 	for _, route := range cfg.Routes {
 		routes = append(routes, upstreamRoute{
-			path:    route.UpstreamPathTemplate,
-			methods: route.UpstreamHTTPMethod,
-			params:  extractParams(route.DownstreamMessage, nil, nil),
-			tprt:    route.DownstreamTopicPartition,
+			path:           route.UpstreamPathTemplate,
+			methods:        route.UpstreamHTTPMethod,
+			params:         extractParams(route.DownstreamMessage, nil, nil),
+			topicPartition: route.DownstreamTopicPartition,
 		})
 	}
 	return routes

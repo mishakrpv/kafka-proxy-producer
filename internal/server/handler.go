@@ -11,7 +11,6 @@ import (
 	"github.com/confluentinc/confluent-kafka-go/v2/kafka"
 	"github.com/gorilla/mux"
 	"github.com/mishakrpv/kafka-proxy-producer/message"
-	"github.com/mishakrpv/kafka-proxy-producer/producer"
 )
 
 type param struct {
@@ -55,19 +54,19 @@ func (p *param) key() (string, error) {
 	return p.keys[length-1], nil
 }
 
-func registerRoutes(routes []upstreamRoute) http.Handler {
+func (s *Server) registerRoutes(routes []upstreamRoute) http.Handler {
 	router := mux.NewRouter()
 
 	for _, route := range routes {
 		router.HandleFunc(route.path, func(w http.ResponseWriter, r *http.Request) {
-			f(w, r, route.methods, route.params, route.tprt)
+			s.handleRoute(w, r, route.methods, route.params, route.topicPartition)
 		})
 	}
 
 	return router
 }
 
-func f(w http.ResponseWriter, r *http.Request, methods []string, params []param, tprt *kafka.TopicPartition) {
+func (s *Server) handleRoute(w http.ResponseWriter, r *http.Request, methods []string, params []param, topicPartition *kafka.TopicPartition) {
 	for i, method := range methods {
 		methods[i] = strings.ToUpper(method)
 	}
@@ -87,7 +86,7 @@ func f(w http.ResponseWriter, r *http.Request, methods []string, params []param,
 		}
 	}
 
-	producer.Produce(tprt, message.Build())
+	go s.producer.Produce(topicPartition, message.Build())
 
 	w.WriteHeader(http.StatusOK)
 }
