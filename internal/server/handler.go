@@ -1,6 +1,7 @@
 package server
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 	"slices"
@@ -38,6 +39,7 @@ func (s *Server) handleRoute(w http.ResponseWriter, r *http.Request, methods []s
 		p.message = message
 		err := matchSource(&p, r)
 		if err != nil {
+			log.Println("An error occurred matching source:", err)
 			w.WriteHeader(http.StatusBadRequest)
 			return
 		}
@@ -61,7 +63,6 @@ func matchSource(p *param, r *http.Request) error {
 	case "[fromheader]":
 		return fromHeader(p, r)
 	default:
-		log.Printf("Unsupported source: %s", p.source)
+		return fmt.Errorf("unsupported source: %s", p.source)
 	}
-	return nil
 }
