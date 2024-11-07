@@ -11,11 +11,11 @@ import (
 )
 
 type ProxyConfig struct {
-	Routes        []route       `json:"Routes"`
+	Routes        []Route       `json:"Routes"`
 	LauchSettings lauchSettings `json:"LaunchSettings"`
 }
 
-type route struct {
+type Route struct {
 	DownstreamTopicPartition *kafka.TopicPartition  `json:"DownstreamTopicPartition"`
 	DownstreamMessage        map[string]interface{} `json:"DownstreamMessage"`
 	UpstreamPathTemplate     string                 `json:"UpstreamPathTemplate"`
