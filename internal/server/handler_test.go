@@ -14,7 +14,8 @@ import (
 type mockProducer struct {
 }
 
-func (m *mockProducer) Produce(topicPartition *kafka.TopicPartition, msg string) {
+func (m *mockProducer) Produce(topicPartition *kafka.TopicPartition, msg string) error {
+	return nil
 }
 
 func newMockServer() *Server {

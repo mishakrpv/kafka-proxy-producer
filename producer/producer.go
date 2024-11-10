@@ -7,7 +7,7 @@ import (
 )
 
 type Producer interface {
-	Produce(topicPartition *kafka.TopicPartition, message string)
+	Produce(topicPartition *kafka.TopicPartition, message string) error
 }
 
 type ConfluentIncKafkaProducer struct {
@@ -18,11 +18,11 @@ func New(cfg kafka.ConfigMap) Producer {
 	return &ConfluentIncKafkaProducer{cfg: cfg}
 }
 
-func (k *ConfluentIncKafkaProducer) Produce(topicPartition *kafka.TopicPartition, message string) {
+func (k *ConfluentIncKafkaProducer) Produce(topicPartition *kafka.TopicPartition, message string) error {
 	p, err := kafka.NewProducer(&k.cfg)
 	if err != nil {
 		log.Println("An error occurred while creating a new producer:", err)
-		return
+		return err
 	}
 	defer p.Close()
 
@@ -45,8 +45,9 @@ func (k *ConfluentIncKafkaProducer) Produce(topicPartition *kafka.TopicPartition
 	}, nil)
 	if err != nil {
 		log.Println("An error occurred producing message:", err)
-		return
+		return err
 	}
 	// Wait for message deliveries before shutting down
 	p.Flush(15 * 1000)
+	return nil
 }

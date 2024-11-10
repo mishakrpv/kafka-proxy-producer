@@ -45,7 +45,11 @@ func (s *Server) handleRoute(w http.ResponseWriter, r *http.Request, methods []s
 		}
 	}
 
-	go s.producer.Produce(topicPartition, message.Build())
+	err := s.producer.Produce(topicPartition, message.Build())
+	if err != nil {
+		log.Println("An error occurred producing message:", err)
+		w.WriteHeader(http.StatusInternalServerError)
+	}
 
 	w.WriteHeader(http.StatusOK)
 }
