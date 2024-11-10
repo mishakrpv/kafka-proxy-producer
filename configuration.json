@@ -8,6 +8,7 @@
         "Metadata": null
       },
       "DownstreamMessage": {
+        "page": "[FromQuery]",
         "principal": {
           "id": "[FromRoute]",
           "name": "[FromBody]"
