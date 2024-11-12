@@ -6,13 +6,16 @@ import (
 	"encoding/json"
 	"net/http"
 	"os"
-	"os/exec"
+	"strings"
 	"testing"
 
 	"github.com/stretchr/testify/require"
 
 	"github.com/testcontainers/testcontainers-go"
 	"github.com/testcontainers/testcontainers-go/modules/kafka"
+
+	"github.com/mishakrpv/kafka-proxy-producer/internal/config"
+	"github.com/mishakrpv/kafka-proxy-producer/internal/server"
 )
 
 func TestWithKafka(t *testing.T) {
@@ -21,6 +24,7 @@ func TestWithKafka(t *testing.T) {
 	kafkaContainer, err := kafka.Run(ctx,
 		"confluentinc/confluent-local:7.5.0",
 		kafka.WithClusterID("test-cluster"),
+		testcontainers.WithHostPortAccess(9093),
 	)
 	defer func() {
 		if err := testcontainers.TerminateContainer(kafkaContainer); err != nil {
@@ -32,11 +36,17 @@ func TestWithKafka(t *testing.T) {
 		return
 	}
 
-	os.Setenv("KAFKA__BOOTSTRAP_SERVERS", "kafka:9093")
-
-	cmd := exec.Command("make", "run")
-	err = cmd.Start()
+	brokers, err := kafkaContainer.Brokers(ctx)
 	require.NoError(t, err)
+
+	t.Logf("Kafka brokers: %s", strings.Join(brokers, " | "))
+
+	os.Setenv("KAFKA__BOOTSTRAP_SERVERS", brokers[0])
+
+	cfg := config.LoadFromFile("../../configuration.json")
+
+	server := server.New(cfg)
+	go server.Run()
 
 	sendRequest(t)
 }
