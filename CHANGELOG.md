@@ -1,7 +1,7 @@
 # Changelog
 
-## v1.0.0
+## v1.0.0 Release notes
 
-### Announcements
+**Release Date**: 12.11.2024
 
-> * **Kafka Proxy Producer** v1.0.0 release coming soon
+This is the first stable release of **kafka-proxy-producer**, marking the transition from earlier pre-release versions to a fully stable and feature-complete version.
